@@ -13,10 +13,12 @@ import io.realm.RealmResults;
 /**
  * 1、值会自动更新，不管是mananged对象还是列表，都是与数据绑定的。
  * 2、重新查询， RealmResults<xx> 对象不一样，但是都会对查询条件监听
+ *
  * @author zhangquan
  */
 public class PersonDao {
     RealmResults<Dog> memberPuppies;
+    private long primaryKey = System.currentTimeMillis();
 
     private void test() {
         Realm realm = Realm.getDefaultInstance();
@@ -26,7 +28,7 @@ public class PersonDao {
 
     }
 
-    public void test1() throws  Exception{
+    public void test1() throws Exception {
         //测试其他变量同步更新
         test();
 
@@ -42,12 +44,11 @@ public class PersonDao {
 
         realm.beginTransaction();
         final Dog managedDog = realm.copyToRealm(dog); // Persist unmanaged objects
-        Person person = realm.createObject(Person.class, 3); // Create managed objects directly
-
+        Person person = realm.createObject(Person.class, primaryKey); // Create managed objects directly
         person.getDogs().add(managedDog);
         realm.commitTransaction();
 
-        System.out.println("dog=" + dog);
+        System.out.println("dog==managedDog:" + (dog == managedDog));
         System.out.println("managedDog=" + managedDog);
         System.out.println("managePerson=" + person);
 
@@ -71,7 +72,7 @@ public class PersonDao {
             Dog item = afterInserted.get(i);
             System.out.println("item=" + item);
         }
-        System.out.println("memberPuppies.newSize="+memberPuppies.size()+",memberPuppies="+memberPuppies);
+        System.out.println("memberPuppies.newSize=" + memberPuppies.size() + ",memberPuppies=" + memberPuppies);
 
         System.out.println("------------update--------");
         /**
@@ -94,7 +95,7 @@ public class PersonDao {
                 int newAge = managedDog.getAge();// => 3 the dogs age is updated
                 System.out.println("puppies.newSize=" + newSize + ",managedDog.getAge()=" + newAge);
 
-                System.out.println("memberPuppies.newSize="+memberPuppies.size()+",memberPuppies="+memberPuppies);
+                System.out.println("memberPuppies.newSize=" + memberPuppies.size() + ",memberPuppies=" + memberPuppies);
             }
         }, new Realm.Transaction.OnError() {
             @Override

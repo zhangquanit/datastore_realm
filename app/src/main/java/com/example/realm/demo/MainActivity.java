@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Process;
 import android.view.View;
 
+import com.example.realm.demo.adapter.RecyclerViewExampleActivity;
 import com.example.realm.demo.dao.PersonDao;
 import com.example.realm.demo.entity.Dog;
 
@@ -17,15 +18,19 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
-    PersonDao personDao;
+    PersonDao personDao=new PersonDao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        personDao = new PersonDao();
-        test();
 
+        findViewById(R.id.btn_adapter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RecyclerViewExampleActivity.class));
+            }
+        });
         findViewById(R.id.btn_deleteall).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 startService(new Intent(MainActivity.this, ProcessService.class));
             }
         });
+
+        test();
     }
 
     private void test() {
@@ -48,10 +55,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 删除数据库
+     */
     private void deleteDB() {
         File filesDir = getFilesDir();
         try {
-//            Realm.getDefaultInstance().deleteAll();
 
             File[] files = filesDir.listFiles();
             for (File file : files) {

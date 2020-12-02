@@ -14,21 +14,19 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        System.out.println("App process="+ Process.myPid());
+        System.out.println("App process=" + Process.myPid());
         Realm.init(this);
 
         /**
          * 修改默认配置
          * 默认名字为 default.realm，保存在Context.getFilesDir()目录下
          */
-//        RealmConfiguration config = new RealmConfiguration.Builder()
-//                .name("myrealm.realm")
-//                .encryptionKey(getKey())
-//                .schemaVersion(2)
-//                .modules(new MySchemaModule())
-//                .migration(new MyMigration())
-//                .build();
-//        Realm.setDefaultConfiguration(config); //保存为默认配置
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("demo.realm")
+                .deleteRealmIfMigrationNeeded() //如果需要整合(字段修改什么的) 就删除realm，之前的保存的数据会被删除
+                .schemaVersion(BuildConfig.VERSION_CODE)
+                .build();
+        Realm.setDefaultConfiguration(config);
 
         /**
          * 多个配置，根据不同config获取不同的Realm实例
@@ -74,9 +72,9 @@ public class App extends Application {
          * 2、如果Realm实例创建于一个没有与Looper绑定的线程，则不会自动更新，除非你调用waitForChange。
          * 通过isAutoRefresh 判断是否支持auto-refresh
          */
-        try(Realm realm = Realm.getDefaultInstance()) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             boolean autoRefresh = realm.isAutoRefresh();
-            System.out.println("当前线程创建的Realm支持auto-refresh："+autoRefresh);
+            System.out.println("当前线程创建的Realm支持auto-refresh：" + autoRefresh);
         }
     }
 

@@ -34,12 +34,19 @@ public class Person extends RealmObject {
         this.dogs = dogs;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Person{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", dogs=" + dogs +
-//                '}';
+
+    /**
+     * 测试数据库升级
+     * 测试数据库升级
+     */
+
+//    private String sex;
+//
+//    public String getSex() {
+//        return sex;
+//    }
+//
+//    public void setSex(String sex) {
+//        this.sex = sex;
 //    }
 }
